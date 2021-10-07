@@ -1,0 +1,61 @@
+name: Fixing linter hints in PR
+
+on:
+  workflow_call:
+    inputs:
+      workdirectory:
+        description: 'The root of the source tree which should be linted'
+        required: true
+        type: string
+
+jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      webif: ${{ steps.changes.outputs.webif }}
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=webif::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -E '\.[jt]s(x)?$' | sed s,${{ inputs.workdirectory }}/,, | xargs)"
+  lint:
+    runs-on: ubuntu-latest
+    needs: changedfiles
+    # only run there are changed files
+    if: ${{needs.changedfiles.outputs.webif}}
+    defaults:
+      run:
+        working-directory: ${{ inputs.workdirectory }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Yarn cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-yarn-${{ hashFiles(inputs.workdirectory + '/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+          path: ~/.cache/yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Run lint --fix
+        continue-on-error: true
+        run: yarn lint:path --fix ${{needs.changedfiles.outputs.webif}}
+      - name: Commit changes
+        uses: Graylog2/add-and-commit@d77762158d703e60c60cf5baa4de52697d1414a3
+        with:
+          message: 'Fixing linter hints for you.'
+          add: 'src'
+          cwd: ${{ inputs.workdirectory }}
+          author_name: Dr. Lint-a-lot
+          author_email: garybot2@graylog.com
+          committer_name: Dr. Lint-a-lot
+          committer_email: garybot2@graylog.com
+
