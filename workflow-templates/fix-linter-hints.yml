@@ -1,0 +1,12 @@
+name: Fix Linter Hints
+
+on:
+  schedule:
+    - cron: '0 */8 * * *'
+
+jobs:
+  linter:
+    uses: Graylog2/.github/.github/workflows/fix-linter-hints.yml@latest-workflows
+    with:
+      workingdirectory: ...
+

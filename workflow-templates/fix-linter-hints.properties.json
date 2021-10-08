@@ -1,0 +1,5 @@
+{
+    "name": "Fix Linter Hints",
+    "description": "Run `yarn lint --fix` periodically to fix linter hints automatically",
+    "iconName": "eslint"
+}

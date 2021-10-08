@@ -1,0 +1,13 @@
+name: Fix Linter Hints
+
+on:
+  pull_request:
+    tags-ignore:
+      - dependencies
+
+jobs:
+  linter:
+    uses: Graylog2/.github/.github/workflows/fix-linter-hints-pr.yml@latest-workflows
+    with:
+      workingdirectory: ...
+

@@ -3,7 +3,7 @@ name: Fixing linter hints in PR
 on:
   workflow_call:
     inputs:
-      workdirectory:
+      workingdirectory:
         description: 'The root of the source tree which should be linted'
         required: true
         type: string
