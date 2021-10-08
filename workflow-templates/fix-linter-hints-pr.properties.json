@@ -1,0 +1,5 @@
+{
+    "name": "Fix Linter Hints in PR",
+    "description": "Run `yarn lint --fix` in PR to fix linter hints automatically and commit result",
+    "iconName": "eslint"
+}
