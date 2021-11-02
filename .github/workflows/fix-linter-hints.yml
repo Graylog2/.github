@@ -3,7 +3,7 @@ name: Fix linter hints
 on: 
   workflow_call:
     inputs:
-      workdirectory:
+      workingdirectory:
         description: 'The root of the source tree which should be linted'
         required: true
         type: string
