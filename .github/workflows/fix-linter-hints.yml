@@ -21,6 +21,11 @@ jobs:
         with:
           repository: Graylog2/graylog2-server
           path: graylog2-server
+      - name: Prepare core repo
+        run: |
+          cd ${{ github.workspace }}/graylog2-server/graylog2-web-interface
+          yarn install
+          yarn build
       - uses: actions/checkout@v2
         with:
           path: plugin
