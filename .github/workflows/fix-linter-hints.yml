@@ -33,6 +33,9 @@ jobs:
           path: ~/.cache/yarn
       - name: Install dependencies
         run: yarn install
+      - name: Reset yarn lockfile
+        run: git checkout yarn.lock
+        continue-on-error: true
       - name: Run lint --fix
         continue-on-error: true
         run: yarn lint --fix
