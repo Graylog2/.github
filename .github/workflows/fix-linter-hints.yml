@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest 
     defaults:
       run:
@@ -22,8 +22,8 @@ jobs:
           repository: Graylog2/graylog2-server
           path: graylog2-server
       - name: Prepare core repo
+        working-directory: graylog2-server/graylog2-web-interface
         run: |
-          cd ${{ github.workspace }}/graylog2-server/graylog2-web-interface
           yarn install
           yarn build
       - uses: actions/checkout@v2
