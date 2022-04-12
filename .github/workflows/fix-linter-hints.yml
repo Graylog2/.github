@@ -13,14 +13,21 @@ jobs:
     runs-on: ubuntu-latest 
     defaults:
       run:
-        working-directory: ${{ inputs.workingdirectory }}
+        working-directory: plugin/${{ inputs.workingdirectory }}
 
     steps:
+      - name: Checkout core repo
+        uses: actions/checkout@v3
+        with:
+          repository: Graylog2/graylog2-server
+          path: graylog2-server
       - uses: actions/checkout@v2
+        with:
+          path: plugin
       - name: Set up Yarn cache
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}/yarn.lock', inputs.workingdirectory)) }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('plugin/{0}/yarn.lock', inputs.workingdirectory)) }}
           restore-keys: |
             ${{ runner.os }}-yarn-
           path: ~/.cache/yarn
@@ -32,6 +39,7 @@ jobs:
       - name: Create/Update Pull Request
         uses: Graylog2/create-pull-request@7380612b49221684fefa025244f2ef4008ae50ad
         with:
+          path: plugin
           title: Fixing linter hints automatically
           body: This PR was created by a job that is running periodically to find and fix linter hints.
           author: Dr. Lint-a-lot <garybot2@graylog.com>
