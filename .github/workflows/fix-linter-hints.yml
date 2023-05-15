@@ -44,6 +44,9 @@ jobs:
       - name: Run lint --fix
         continue-on-error: true
         run: yarn lint --fix
+      - name: Run lint:styles --fix
+        continue-on-error: true
+        run: yarn lint:styles --fix
       - name: Create/Update Pull Request
         uses: Graylog2/create-pull-request@7380612b49221684fefa025244f2ef4008ae50ad
         with:
