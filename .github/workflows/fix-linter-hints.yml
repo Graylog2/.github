@@ -25,26 +25,19 @@ jobs:
           sudo rm -rf /usr/local/lib/android # will release about 10 GB if you don't need Android
           sudo rm -rf /usr/share/dotnet # will release about 20GB if you don't need .NET
       - name: Checkout core repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           repository: Graylog2/graylog2-server
           path: graylog2-server
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v5
         with:
           java-version: ${{ matrix.java-version }}
           distribution: temurin
           cache: maven
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
         with:
           path: plugin
-      - name: Set up Yarn cache
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles(format('plugin/{0}/yarn.lock', inputs.workingdirectory)) }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-          path: ~/.cache/yarn
       - name: Build with Maven
         run: mvn -B --fail-fast -Pedantic -Dspotbugs.skip -Dmaven.wagon.http.retryHandler.class=standard -Dmaven.wagon.http.retryHandler.count=3 -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -DskipTests compile
         env:
