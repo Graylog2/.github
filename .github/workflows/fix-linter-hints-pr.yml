@@ -17,7 +17,7 @@ jobs:
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           path: plugin
@@ -38,20 +38,13 @@ jobs:
 
     steps:
       - name: Checkout core repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           repository: Graylog2/graylog2-server
           path: graylog2-server
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           path: plugin
-      - name: Set up Yarn cache
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles('plugin/' + inputs.workdirectory + '/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-          path: ~/.cache/yarn
       - name: Install dependencies
         run: yarn install
       - name: Run lint --fix
